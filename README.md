@@ -6,7 +6,7 @@
 
 The goals / steps of this project are the following:
 * Use the simulator to collect data of good driving behavior
-* Build, a convolution neural network in Keras that predicts steering angles from images
+* Build, a convolutional neural network in Keras that predicts steering angles from images
 * Train and validate the model with a training and validation set
 * Test that the model successfully drives around track one without leaving the road
 * Summarize the results with a written report
@@ -29,12 +29,12 @@ The goals / steps of this project are the following:
 [image13]: ./examples/autonomous_run.gif "Fully Autonomous Run"
 
 ---
-### Files & Code Quality
+### Files
 
 My project includes the following files:
 * model.py containing the script to create and train the model
 * drive.py for driving the car in autonomous mode
-* model.h5 containing a trained convolution neural network 
+* model.h5 containing a trained convolutional neural network 
 * writeup_report.md or writeup_report.pdf summarizing the results
 
 #### 1. Executing autonomous run from trained model.
@@ -46,7 +46,7 @@ python drive.py model.h5
 
 #### 2. Training autonomous model.
 
-The model.py file contains the code for training and saving the convolution neural network. The file shows the pipeline I used for training and validating the model, and it contains comments to explain how the code works. Training can be carried out by executing
+The model.py file contains the code for training and saving the convolutional neural network. The file shows the pipeline I used for training and validating the model, and it contains comments to explain how the code works. Training can be carried out by executing
 ```sh
 python model.py
 ```
@@ -57,7 +57,7 @@ Be sure to capture training data and and update the file names according to the 
 
 #### 1. An appropriate model architecture has been employed
 
-My model consists of a convolution neural network beginning with 3x3 filter sizes then 2x2's. The filter depths range between 24 and 128 (model.py lines 95-101) 
+My model consists of a convolutional neural network beginning with 3x3 filter sizes then 2x2's. The filter depths range between 24 and 128 (model.py lines 95-101) 
 The model includes RELU layers to introduce nonlinearity (code line 95,98-101), and the data is normalized in the model using a Keras lambda layer (code line 94).
 
 #### 2. Attempts to reduce overfitting in the model
@@ -70,7 +70,7 @@ The model was trained and validated on different data sets (70/30 split) to ensu
 
 #### 3. Model parameter tuning
 
-The model used an adam optimizer, so the learning rate was not tuned manually (model.py line 108).
+The model used an Adam Optimizer, so the learning rate was not tuned manually (model.py line 108).
 
 #### 4. Appropriate training data
 
@@ -84,26 +84,28 @@ For details about how I created the training data, see section 3 of the next sec
 
 The overall strategy for deriving a model architecture was to gather the right training sample data, so that the model knows the right things to focus on. Another apporach was to base the eventual model off a previously existing model that has demonstrated good performance on a similar problem.
 
-My first step was to use a convolution neural network model similar to the architecture published by the autonomous-vehicle team at NVIDIA. I thought this model might be appropriate because the team at NVIDIA used this architecture to successfully train their automous vehicles.
+My first step was to use a convolutional neural network model similar to the architecture published by the autonomous-vehicle team at NVIDIA. I thought this model might be appropriate because the team at NVIDIA used this architecture to successfully train their automous vehicles.
 
-I started off by croping the input to only show our area of interest. This was the surounding trees, rocks and objects of no importance had less of an impact on the training.
-Similar to the NVIDIA architecture, I introduced a normalization layer to normalize the number range (-0.5 to 0.5) of the input images.
-This was followed by 5 convolutional layers with filter sizes ranging from 3x3 and 2x2. The filter had depths ranging from 24 to 120.
+I started off by croping the input to only show our area of interest. I did this so that the surounding trees, rocks and objects of no importance had less of an impact on the training.
+Similar to the NVIDIA architecture, I introduced a normalization layer to normalize the color channel range (-0.5 to 0.5) from (0 - 255) of the input images.
+This was followed by 5 convolutional layers with 3x3 and 2x2 filter sizes. The filter had depths ranging from 24 to 120.
 This was then followed by 4 fully connected layers similar to the NVIDIA architecture.
 
 I applied some down-sampling to improve the learning speed of the model by introducing a Max Pooling layer after the dropout layer.
 
 To combat the overfitting, I modified the model by introducing a dropout layer after the first convolutional layer. I applied a 25% dropout rate, which according to the vaildation loss results was enough to avoid overfitting. 
 
-After creating the model, I conducted training using an Adam Optimizer to I need not need to fiddle with the learning rate. The final model ran for 8 epochs before a plateau on the loss improvement occured.
+After creating the model, I conducted training using an Adam Optimizer so I did not have to fiddle with the learning rate. The final model ran for 8 epochs before a plateau on the loss improvement occured.
 
-The final step was to run the simulator to see how well the car was driving around track one. There were a few spots where the vehicle fell off the track especially around sharp bends or areas that had close hills present. To improve the driving behavior in these cases, I collected a lot more showing how to correctly take those sharp bends. I collected this data both in the normal direction and in the oposite direction. As for the issues with the hills, I solved that by cropping the camera image to focus on the course and ignore objects that shouldn't be considered.
+The final step was to run the simulator to see how well the car was driving around track one. There were a few spots where the vehicle fell off the track especially around sharp bends or areas that had close hills present.
+To improve the driving behavior in these cases, I collected a lot more data showing how to correctly take those sharp bends. I collected this data both in the normal direction and in the oposite direction.
+As for the issues with the hills, I solved that by cropping the camera image to focus on the course and ignore objects that shouldn't be considered.
 
-At the end of the process, the vehicle is able to drive autonomously around the track multiple times without leaving the road.
+At the end of the process, the vehicle was able to drive autonomously around the track multiple times without leaving the road.
 
 #### 2. Final Model Architecture
 
-The final model architecture (model.py lines 92-106) consisted of a convolution neural network with the following layers and layer sizes:
+The final model architecture (model.py lines 92-106) consisted of a convolutional neural network with the following layers and layer sizes:
 
 | Layer                 | Description                                   | 
 |:---------------------:|:---------------------------------------------:| 
@@ -145,12 +147,12 @@ These images show what a recovery looks like starting from being off to the righ
 
 Then I repeated this process by driving in the oposite direction in order to get more data points.
 
-To augment the data set, I also flipped images and angles thinking that this would help avoid a left turn bias, since most of the track veers left. For example, here is an image that has then been flipped:
+To augment the data set, I flipped images and steering angles so that this would help avoid a left turn bias, since most of the track veers left. For example, here is an image that has then been flipped:
 
 ![alt text][image6]
 ![alt text][image7]
 
-After the collection process, I had 13457 number of data points. By creating a histogram of the steering angle distribution for the sample data I could see that there was a heavy bias towards keeping the steering straight.
+After the collection process, I had 13457 data points. By creating a histogram of the steering angle distribution for the sample data I could see that there was a heavy bias towards keeping the steering straight.
 
 ![alt text][image8]
 
@@ -175,7 +177,7 @@ I updated the angle of correction of the left and right camera images to 0.25 fr
 
 This model performed better at a loss of 0.05 but still veered off a few bends by slightly overcorrecting.
 
-I decided to tackle the zero steering problem another way by using the mouse to steer instead of keyboard keys. This helped the model understand that steering correction is always happening at every stage of a ride. As a result there was much less zero steering angles and less extreme steering angle outliers.
+I decided to tackle the zero steering problem with an additional approach by using the mouse to steer instead of keyboard keys. This helped the model understand that steering correction is always happening at every stage of a ride. As a result there was much less zero steering angles and less extreme steering angle outliers.
 
 ![alt text][image12]
 
